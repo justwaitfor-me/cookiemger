@@ -1,46 +1,45 @@
 /*!
- * justwait cookiemger v2.0
+ * justwait cookiemger v3.1
  * A lightweight cookie consent manager
  * MIT License
  */
 
-document.addEventListener('DOMContentLoaded', function () {
-  // Configuration
-  let config = {
-    position: 'right-bottom',
-    theme: 'auto',
-    showCustomize: true,
-    message: 'We use cookies to enhance your experience',
-    acceptText: 'Accept All',
-    denyText: 'Reject',
-    customizeText: 'Customize',
-    title: 'Cookie Preferences',
-    requiredText: 'Required cookies cannot be disabled',
-    primaryColor: '#3b82f6',
-    borderRadius: '8px'
-  };
 
-  const savedConfig = localStorage.getItem('cookie_config');
-  if (savedConfig) {
-    try {
-      const parsedConfig = JSON.parse(savedConfig);
-      config = { ...config, ...parsedConfig };
-    } catch (e) {
-      console.error('Failed to parse cookie_config from localStorage:', e);
-    }
-  }
+// Configuration
+let config = {
+  position: 'right-bottom',
+  theme: 'auto',
+  showCustomize: true,
+  message: 'We use cookies to enhance your experience',
+  acceptText: 'Accept',
+  denyText: 'Reject',
+  customizeText: 'Customize',
+  title: 'Cookie Preferences',
+  requiredText: 'Required cookies cannot be disabled',
+  primaryColor: '#3b82f6',
+  borderRadius: '8px'
+};
 
-  // Check for existing cookie
-  const cookie = document.cookie.split('; ').find(row => row.startsWith('cookie_consent='));
-  if (cookie) {
-    try {
-      const prefs = JSON.parse(decodeURIComponent(cookie.split('=')[1]));
-      if (prefs.theme === 'dark') document.documentElement.classList.add('dark');
-      return;
-    } catch (e) {
-      // Old cookie format, proceed to show widget
-    }
+const savedConfig = localStorage.getItem('cookie_config');
+if (savedConfig) {
+  try {
+    const parsedConfig = JSON.parse(savedConfig);
+    config = { ...config, ...parsedConfig };
+  } catch (e) {
+    console.error('Failed to parse cookie_config from localStorage:', e);
   }
+}
+
+// Check for existing cookie
+const cookie = document.cookie.split('; ').find(row => row.startsWith('cookie_consent='));
+if (cookie) {
+  try {
+    const prefs = JSON.parse(decodeURIComponent(cookie.split('=')[1]));
+    if (prefs.theme === 'dark') document.documentElement.classList.add('dark');
+  } catch (e) {
+    // Old cookie format, proceed to show widget
+  }
+} else {
 
   // Create and inject styles with animations
   const style = document.createElement('style');
@@ -233,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.head.appendChild(style);
 
   // Version and GitHub URL
-  const version = 'v2.0';
+  const version = 'v3.1';
   const githubUrl = 'https://github.com/justwaitfor-me/cookiemger.git';
 
   // Create widget
@@ -445,4 +444,4 @@ document.addEventListener('DOMContentLoaded', function () {
     document.cookie = `cookie_consent=${encodeURIComponent(JSON.stringify(prefs))}; expires=${expires.toUTCString()}; path=/`;
     widget.remove();
   });
-});
+}
