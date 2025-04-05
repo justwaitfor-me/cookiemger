@@ -1,12 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie Maneger Demo</title>
+    <title>Cookie Manager Example</title>
+    <script src="https://content.justwaitforme.de/v2/api/static/cookies.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const config = {
+                position: 'right-bottom',
+                theme: 'auto',
+                showCustomize: true,
+                message: 'We use cookies to enhance your experience',
+                acceptText: 'Accept All',
+                denyText: 'Reject',
+                customizeText: 'Customize',
+                title: 'Cookie Preferences',
+                requiredText: 'Required cookies cannot be disabled',
+                primaryColor: '#3b82f6',
+                borderRadius: '8px'
+            };
+
+            localStorage.setItem('cookie_config', JSON.stringify(config));
+        });
+    </script>
 </head>
+
 <body>
-    <h1>Cookie Maneger Demo</h1>
-    <script src="cookies.js"></script>
+    <h1>Welcome to Cookie Manager Example</h1>
+    <p>This is a simple example of how to use the Cookie Manager.</p>
+
+    <p>Customization Options</p>
+    <ul>
+        <li>Position: right-bottom</li>
+        <li>Theme: auto</li>
+        <li>Show Customize: true</li>
+        <li>Message: We use cookies to enhance your experience</li>
+        <li>Accept Text: Accept All</li>
+        <li>Deny Text: Reject</li>
+        <li>Customize Text: Customize</li>
+        <li>Title: Cookie Preferences</li>
+        <li>Required Text: Required cookies cannot be disabled</li>
+        <li>Primary Color: #3b82f6</li>
+        <li>Border Radius: 8px</li>
+    </ul>
+
+    <p>Click the button below to see the cookie manager in action.</p>
+    <button id="show-cookie-manager">Show Cookie Manager</button>
+
+    <p>Note: This example uses the JustWaitForMe Cookie Manager library.</p>
+    <div>
+        <p id="cookie-status"></p>
+        <script>
+        function checkCookieConsent() {
+            const cookieConsent = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('cookie_consent='));
+
+            if (cookieConsent) {
+            const consentData = decodeURIComponent(cookieConsent.split('=')[1]);
+            document.getElementById('cookie-status').textContent = JSON.stringify(JSON.parse(consentData), null, 2);
+            } else {
+            document.getElementById('cookie-status').textContent = 'Cookie "cookie_consent" is not set.';
+            }
+        }
+
+        // Check initially
+        checkCookieConsent();
+
+        // Check every few seconds
+        setInterval(checkCookieConsent, 500);
+        </script>
+    </div>
+    <script>
+        document.getElementById('show-cookie-manager').addEventListener('click', function () {
+            // Clear cookies
+            document.cookie.split(";").forEach(function (cookie) {
+                document.cookie = cookie.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+            });
+
+            // Reload the page
+            location.reload();
+        });
+    </script>
 </body>
+
 </html>

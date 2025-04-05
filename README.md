@@ -1,67 +1,120 @@
-# Cookie Manager
+# Cookie Manager v2.0
 
-justwait cookiemger is a lightweight cookie consent manager that helps you comply with cookie laws by providing users with options to accept or reject cookies. It is designed to enhance user experience while ensuring transparency regarding cookie usage.
+**justwait cookiemger** is a lightweight cookie consent manager designed to help websites comply with cookie regulations while providing a customizable user experience.
+
+---
 
 ## Features
 
-- Customizable cookie consent widget
-- Supports dark and light themes
-- User preferences are stored in cookies
-- Easy integration into any web project
+- Lightweight and easy to integrate.
+- Fully customizable UI and behavior.
+- Supports light, dark, and auto themes.
+- Allows users to accept, reject, or customize cookie preferences.
+- Stores user preferences in cookies and localStorage.
+
+---
 
 ## Installation
 
-To use the cookie consent manager, simply include the `cookies.js` or `cookies.min.js` file in your HTML:
+### Using the CDN
+Include the cookie manager in your project by adding the following script tag to your HTML file:
 
 ```html
-<script src="path/to/cookies.js"></script>
+<script src="https://content.justwaitforme.de/v2/api/static/cookies.min.js"></script>
 ```
-or for production:
+
+### Using the Local File
+Alternatively, include the local `cookies.js` file:
+
 ```html
-<script src="path/to/cookies.min.js"></script>
+<script src="cookies.js"></script>
 ```
 
-## Usage
+---
 
-After including the script, the cookie consent widget will automatically appear on your website when the DOM is fully loaded. You can customize its appearance and behavior through the configuration options in the script.
+## Basic Usage
 
-### Configuration Options
+Initialize the cookie manager with default settings by adding the following script:
 
-You can modify the following configuration options in the `cookies.js` file:
+```html
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const config = {
+            position: 'right-bottom', // Widget position
+            theme: 'auto', // Theme: 'light', 'dark', or 'auto'
+            showCustomize: true, // Show "Customize" button
+            message: 'We use cookies to enhance your experience',
+            acceptText: 'Accept All',
+            denyText: 'Reject',
+            customizeText: 'Customize',
+            title: 'Cookie Preferences',
+            requiredText: 'Required cookies cannot be disabled',
+            primaryColor: '#3b82f6', // Primary button color
+            borderRadius: '8px' // Widget border radius
+        };
 
-- `position`: The position of the cookie consent widget on the screen (e.g., 'right-bottom', 'left-bottom', 'right-top', 'left-top', 'center').
-- `theme`: The theme of the widget ('auto', 'dark', or 'light').
-- `showCustomize`: Boolean value to show or hide the customize button.
-- `message`: The message displayed in the widget.
-- `acceptText`: The text for the accept button.
-- `denyText`: The text for the deny button.
-- `customizeText`: The text for the customize button.
-- `title`: The title of the cookie preferences modal.
-- `requiredText`: The message indicating that required cookies cannot be disabled.
-- `primaryColor`: The primary color used in the widget.
-- `borderRadius`: The border radius of the widget.
-- `githubUrl`: The URL to the project's GitHub repository.
+        // Save the configuration to localStorage
+        localStorage.setItem('cookie_config', JSON.stringify(config));
+    });
+</script>
+```
 
-## Example
+---
 
-Here is a simple example of how to use the cookie consent manager:
+## Customization
+
+Customize the cookie manager by modifying the `config` object. Below are the available options:
+
+| Option         | Description                                | Default Value                                |
+|----------------|--------------------------------------------|---------------------------------------------|
+| `position`     | Position of the widget (`right-bottom`, `left-bottom`, `right-top`, `left-top`, `center`). | `right-bottom`                              |
+| `theme`        | Theme of the widget (`light`, `dark`, `auto`). | `auto`                                      |
+| `showCustomize`| Whether to show the "Customize" button.    | `true`                                      |
+| `message`      | Message displayed in the widget.           | `"We use cookies to enhance your experience"` |
+| `acceptText`   | Text for the "Accept All" button.          | `"Accept All"`                              |
+| `denyText`     | Text for the "Reject" button.              | `"Reject"`                                  |
+| `customizeText`| Text for the "Customize" button.           | `"Customize"`                               |
+| `title`        | Title of the customization modal.          | `"Cookie Preferences"`                      |
+| `requiredText` | Text for required cookies description.     | `"Required cookies cannot be disabled"`     |
+| `primaryColor` | Primary button color (e.g., `#3b82f6`).    | `#3b82f6`                                   |
+| `borderRadius` | Border radius of the widget (e.g., `8px`). | `8px`                                      |
+
+---
+
+## Example Integration
+
+Here’s a complete example of how to integrate the cookie manager into your website:
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie Consent Example</title>
-    <script src="path/to/cookies.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Manager Example</title>
+  <script src="https://content.justwaitforme.de/v2/api/static/cookies.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const config = {
+            position: 'right-bottom',
+            theme: 'auto',
+            showCustomize: true,
+            message: 'We use cookies to enhance your experience',
+            acceptText: 'Accept All',
+            denyText: 'Reject',
+            customizeText: 'Customize',
+            title: 'Cookie Preferences',
+            requiredText: 'Required cookies cannot be disabled',
+            primaryColor: '#3b82f6',
+            borderRadius: '8px'
+        };
+
+        localStorage.setItem('cookie_config', JSON.stringify(config));
+    });
+  </script>
 </head>
 <body>
-    <h1>Welcome to My Website</h1>
-    <p>This is an example of a website using the cookie consent manager.</p>
+  <h1>Welcome to Cookie Manager Example</h1>
 </body>
 </html>
 ```
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.

@@ -1,12 +1,12 @@
 /*!
- * justwait cookiemger v1.0
+ * justwait cookiemger v2.0
  * A lightweight cookie consent manager
  * MIT License
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Configuration
-  const config = {
+  let config = {
     position: 'right-bottom',
     theme: 'auto',
     showCustomize: true,
@@ -17,9 +17,18 @@ document.addEventListener('DOMContentLoaded', function() {
     title: 'Cookie Preferences',
     requiredText: 'Required cookies cannot be disabled',
     primaryColor: '#3b82f6',
-    borderRadius: '8px',
-    githubUrl: 'https://github.com/yourusername/cookiemger'
+    borderRadius: '8px'
   };
+
+  const savedConfig = localStorage.getItem('cookie_config');
+  if (savedConfig) {
+    try {
+      const parsedConfig = JSON.parse(savedConfig);
+      config = { ...config, ...parsedConfig };
+    } catch (e) {
+      console.error('Failed to parse cookie_config from localStorage:', e);
+    }
+  }
 
   // Check for existing cookie
   const cookie = document.cookie.split('; ').find(row => row.startsWith('cookie_consent='));
@@ -223,6 +232,10 @@ document.addEventListener('DOMContentLoaded', function() {
   `;
   document.head.appendChild(style);
 
+  // Version and GitHub URL
+  const version = 'v2.0';
+  const githubUrl = 'https://github.com/justwaitfor-me/cookiemger.git';
+
   // Create widget
   const widget = document.createElement('div');
   widget.className = 'cookie-widget';
@@ -277,9 +290,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="cookie-footer">
       <div class="cookie-footer-text">
         <span class="cookie-footer-name">justwait cookiemger</span>
-        <span class="cookie-footer-version">v1.0</span>
+        <span class="cookie-footer-version">${version}</span>
       </div>
-      <a href="${config.githubUrl}" class="cookie-footer-github" target="_blank">
+      <a href="${githubUrl}" class="cookie-footer-github" target="_blank">
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
         </svg>
@@ -390,14 +403,14 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('save-prefs')?.addEventListener('click', () => {
     const expires = new Date();
     expires.setFullYear(expires.getFullYear() + 1);
-    
+
     const prefs = {
       analytics: document.getElementById('analytics').checked,
       marketing: document.getElementById('marketing').checked,
       theme: modal.classList.contains('dark') ? 'dark' : 'light',
       date: new Date().toISOString()
     };
-    
+
     document.cookie = `cookie_consent=${encodeURIComponent(JSON.stringify(prefs))}; expires=${expires.toUTCString()}; path=/`;
     modal.style.display = 'none';
     widget.remove();
@@ -406,14 +419,14 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('accept-all')?.addEventListener('click', () => {
     const expires = new Date();
     expires.setFullYear(expires.getFullYear() + 1);
-    
+
     const prefs = {
       analytics: true,
       marketing: true,
       theme: widget.classList.contains('dark') ? 'dark' : 'light',
       date: new Date().toISOString()
     };
-    
+
     document.cookie = `cookie_consent=${encodeURIComponent(JSON.stringify(prefs))}; expires=${expires.toUTCString()}; path=/`;
     widget.remove();
   });
@@ -421,14 +434,14 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('deny-all')?.addEventListener('click', () => {
     const expires = new Date();
     expires.setFullYear(expires.getFullYear() + 1);
-    
+
     const prefs = {
       analytics: false,
       marketing: false,
       theme: widget.classList.contains('dark') ? 'dark' : 'light',
       date: new Date().toISOString()
     };
-    
+
     document.cookie = `cookie_consent=${encodeURIComponent(JSON.stringify(prefs))}; expires=${expires.toUTCString()}; path=/`;
     widget.remove();
   });
